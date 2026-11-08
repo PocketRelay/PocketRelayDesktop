@@ -6,6 +6,7 @@ use crate::config::{Config, load_config_from_path};
 use crate::screens::app::AppScreen;
 use crate::state::config::ConfigState;
 use crate::utils::gpui_tokio::{Tokio, init_tokio};
+use crate::utils::logging;
 use crate::utils::paths::get_project_dirs;
 
 pub mod config;
@@ -23,6 +24,8 @@ fn init_theme(cx: &mut App) {
 }
 
 fn main() -> anyhow::Result<()> {
+    logging::setup();
+
     let paths = get_project_dirs().context("failed to load project dirs")?;
 
     application().with_assets(assets::Assets).run(move |cx| {

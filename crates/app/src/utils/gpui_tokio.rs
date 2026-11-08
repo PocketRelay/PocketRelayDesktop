@@ -53,7 +53,7 @@ impl Tokio {
             });
             cx.background_spawn(async move {
                 let result = join_handle.await;
-                drop(cancel);
+                cancel.abort();
                 result
             })
         })
@@ -79,7 +79,7 @@ impl Tokio {
                 let app = app.clone();
                 async move {
                     let result = join_handle.await;
-                    drop(cancel);
+                    cancel.abort();
                     app.update(move |cx| {
                         callback(cx, result);
                     });

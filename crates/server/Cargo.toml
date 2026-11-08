@@ -9,3 +9,27 @@ keywords.workspace = true
 authors.workspace = true
 
 [dependencies]
+pocket-relay-desktop-core.workspace = true
+pocket-relay-desktop-blaze-networking.workspace = true
+
+tdf.workspace = true
+bytes.workspace = true
+
+tokio.workspace = true
+tokio-util.workspace = true
+futures.workspace = true
+
+tracing.workspace = true
+
+uuid.workspace = true
+
+anyhow.workspace = true
+
+# SSLv3 implementation for the game communications
+blaze-ssl-async = "0.4"
+axum = "0.8.9"
+
+
+[features]
+default = []
+large-packet-logging = []

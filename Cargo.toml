@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["crates/app", "crates/server"]
+members = ["crates/app", "crates/server", "crates/blaze-networking", "crates/core"]
 
 [workspace.package]
 authors = ["Jacobtread <jacobtread@gmail.com>"]
@@ -11,3 +11,35 @@ keywords = ["EA", "PocketRelay", "MassEffect3"]
 edition = "2024"
 
 [workspace.dependencies]
+pocket-relay-desktop-blaze-networking = { path = "./crates/blaze-networking", version = "0.0.0" }
+pocket-relay-desktop-core = { path = "./crates/core", version = "0.0.0" }
+
+# Error handling
+anyhow = "1.0.104"
+thiserror = "2.0.21"
+
+# Locks
+parking_lot = "0.13.0"
+
+# Serialization
+serde = "1.0.229"
+serde_json = "1.0.154"
+
+# Async
+tokio = { version = "1.54.1", features = ["full"] }
+tokio-util = { version = "0.7.17", features = ["full"] }
+futures = "^0.3"
+
+# Logging
+tracing = "0.1.44"
+
+# Cheaply cloned bytes
+bytes = "1.11.0"
+
+# TDF packet format
+tdf = { version = "0.4", features = ["bytes"] }
+
+# Bit flags
+bitflags = { version = "2.10", features = ["serde"] }
+
+uuid = { version = "^1", features = ["v4", "serde", "fast-rng"] }

@@ -1,0 +1,11 @@
+[package]
+name = "pocket-relay-desktop-core"
+version = "0.0.0"
+description = "Mass Effect 3 private server - core"
+
+edition.workspace = true
+license.workspace = true
+keywords.workspace = true
+authors.workspace = true
+
+[dependencies]

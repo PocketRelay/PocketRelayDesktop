@@ -13,6 +13,7 @@ edition = "2024"
 [workspace.dependencies]
 pocket-relay-desktop-blaze-networking = { path = "./crates/blaze-networking", version = "0.0.0" }
 pocket-relay-desktop-core = { path = "./crates/core", version = "0.0.0" }
+pocket-relay-desktop-server = { path = "./crates/server", version = "0.0.0" }
 
 # Error handling
 anyhow = "1.0.104"

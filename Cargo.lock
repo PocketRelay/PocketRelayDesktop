@@ -1509,6 +1509,26 @@ dependencies = [
 ]
 
 [[package]]
+name = "embeddy"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e0d04be9188776729de8d4f5ef682f7dbfd8e86221c7284b6415b2ef86d83283"
+dependencies = [
+ "embeddy-derive",
+]
+
+[[package]]
+name = "embeddy-derive"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bf0fab0b584e67341bbfedce7c8d59d9cebaa9088fa494338ed4f8be92130bd3"
+dependencies = [
+ "quote",
+ "syn 2.0.119",
+ "walkdir",
+]
+
+[[package]]
 name = "encoding_rs"
 version = "0.8.44"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3308,6 +3328,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "indoc"
+version = "2.0.8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a37b2691796cffeb8a8cd305ac66e65841559f147f4e63231d0eafa4db5384d1"
+dependencies = [
+ "rustversion",
+]
+
+[[package]]
 name = "inotify"
 version = "0.11.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4990,6 +5019,7 @@ dependencies = [
  "gpui-kit",
  "log-panics",
  "parking_lot 0.13.0",
+ "pocket-relay-desktop-server",
  "rfd",
  "serde",
  "serde_json",
@@ -5026,12 +5056,19 @@ dependencies = [
  "axum",
  "blaze-ssl-async",
  "bytes",
+ "embeddy",
  "futures",
+ "hyper",
+ "hyper-util",
+ "indoc",
  "pocket-relay-desktop-blaze-networking",
  "pocket-relay-desktop-core",
+ "serde",
+ "serde_json",
  "tdf",
  "tokio",
  "tokio-util",
+ "tower",
  "tracing",
  "uuid",
 ]

@@ -27,8 +27,20 @@ anyhow.workspace = true
 
 # SSLv3 implementation for the game communications
 blaze-ssl-async = "0.4"
-axum = "0.8.9"
 
+# HTTP server
+axum = "0.8.9"
+hyper = "1.6"
+hyper-util = { version = "0.1.10", features = ["tokio"] }
+tower = { version = "0.5.2", features = ["util"] }
+
+serde.workspace = true
+serde_json.workspace = true
+
+indoc = "2"
+
+# Resource embedding
+embeddy = "0.1"
 
 [features]
 default = []

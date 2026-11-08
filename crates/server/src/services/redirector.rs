@@ -6,11 +6,8 @@ use anyhow::Context;
 use blaze_ssl_async::{BlazeAccept, BlazeListener};
 use futures::{SinkExt, TryStreamExt};
 use pocket_relay_desktop_blaze_networking::{Packet, packet::PacketCodec};
-use std::{
-    net::{SocketAddr, SocketAddrV4},
-    time::Duration,
-};
-use tokio::{task::AbortHandle, time::timeout};
+use std::{net::SocketAddrV4, time::Duration};
+use tokio::time::timeout;
 use tokio_util::codec::Framed;
 
 /// Server for handling blaze connections

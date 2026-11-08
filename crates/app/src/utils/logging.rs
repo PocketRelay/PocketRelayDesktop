@@ -1,7 +1,9 @@
 use tracing_subscriber::{EnvFilter, fmt, layer::SubscriberExt, util::SubscriberInitExt};
 
 pub fn setup() {
-    let filter = EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("debug"));
+    let filter = EnvFilter::try_from_default_env().unwrap_or_else(|_| {
+        EnvFilter::new("debug,naga=warn,gpui_wgpu=warn,wgpu_hal=warn,wgpu_core=warn")
+    });
 
     let stdout_layer = fmt::layer().with_target(true).with_ansi(true);
 

@@ -1,6 +1,7 @@
 use anyhow::Context;
 use gpui_kit::component::{Theme, ThemeMode, TitleBar};
 use gpui_kit::*;
+use pocket_relay_desktop_server::services::Services;
 
 use crate::config::{Config, load_config_from_path};
 use crate::screens::app::AppScreen;
@@ -42,6 +43,22 @@ fn main() -> anyhow::Result<()> {
             cx,
             async move { load_config_from_path(&read_config_path).await },
         );
+
+        let services = Tokio::block_on(cx, Services::start());
+        let _services = match services {
+            Ok(value) => value,
+            Err(error) => {
+                // TODO: Render a dedicated app window instead
+                tracing::error!(?error, "failed to start services");
+                cx.show_system_notification(SystemNotification {
+                    tag: "startup-failure".into(),
+                    title: "Failed to start services".into(),
+                    body: "One or more internal service failed to start, Pocket Relay will be unavailable".into(),
+                    actions: Default::default(),
+                });
+                return;
+            }
+        };
 
         dbg!(&config_path);
 

@@ -1,0 +1,81 @@
+use axum::{
+    body::Body,
+    http::{HeaderValue, Request},
+    response::{IntoResponse, Response},
+};
+use embeddy::Embedded;
+use futures::future::BoxFuture;
+use hyper::{StatusCode, header::CONTENT_TYPE};
+use std::{
+    convert::Infallible,
+    path::Path,
+    task::{Context, Poll},
+};
+use tower::Service;
+
+/// Resources embedded from the public data folder such as the content for the in-game store.
+#[derive(Clone, Embedded)]
+#[folder = "public"]
+pub struct PublicContent;
+
+impl Service<Request<Body>> for PublicContent {
+    type Response = Response;
+    type Error = Infallible;
+    type Future = BoxFuture<'static, Result<Self::Response, Self::Error>>;
+
+    fn poll_ready(&mut self, _cx: &mut Context<'_>) -> Poll<Result<(), Self::Error>> {
+        Poll::Ready(Ok(()))
+    }
+
+    fn call(&mut self, req: Request<Body>) -> Self::Future {
+        let path = req.uri().path();
+
+        // Strip the leading slash in order to match paths correctly
+        let mut path = match path.strip_prefix('/') {
+            Some(value) => value.to_string(),
+            None => path.to_string(),
+        };
+
+        let std_path = Path::new(&path);
+
+        // Determine type using extension
+        let extension: String = match std_path.extension() {
+            // Extract the extension
+            Some(value) => value.to_string_lossy().to_string(),
+            // Use the index file when responding to paths (For SPA dashboard support)
+            None => {
+                path = "index.html".to_string();
+                "html".to_string()
+            }
+        };
+
+        Box::pin(async move {
+            let path = path;
+
+            // Guess mime type from file extension
+            let mime_type: &'static str = match extension.as_ref() {
+                "html" => "text/html",
+                "js" | "mjs" => "text/javascript",
+                "json" => "application/json",
+                "woff" => "font/woff",
+                "woff2" => "font/woff2",
+                "webp" => "image/webp",
+                "css" => "text/css",
+                _ => "text/plain",
+            };
+
+            // File exists within binary serve that
+            if let Some(contents) = Self::get(&path) {
+                // Create byte response from the embedded file
+                let mut response = Body::from(contents).into_response();
+                response
+                    .headers_mut()
+                    .insert(CONTENT_TYPE, HeaderValue::from_static(mime_type));
+                return Ok(response);
+            }
+
+            // All above failed server 404
+            Ok(StatusCode::NOT_FOUND.into_response())
+        })
+    }
+}

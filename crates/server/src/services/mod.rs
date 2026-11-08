@@ -4,11 +4,12 @@ use anyhow::Context;
 use tokio::{net::TcpListener, task::AbortHandle};
 
 use crate::{
-    services::{blaze::BlazeServer, redirector::RedirectorServer},
+    services::{blaze::BlazeServer, http::HttpServer, redirector::RedirectorServer},
     utils::addr::any_localhost,
 };
 
 mod blaze;
+mod http;
 mod redirector;
 
 /// Handle referencing a service bound to a local socket, contains
@@ -53,11 +54,14 @@ impl Services {
         let redirector = RedirectorServer::start(blaze.addr)
             .await
             .context("failed to start redirector")?;
+        let http = HttpServer::start()
+            .await
+            .context("failed to start http server")?;
 
         Ok(Services {
             blaze,
             redirector,
-            http: todo!(),
+            http,
         })
     }
 }

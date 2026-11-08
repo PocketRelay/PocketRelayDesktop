@@ -1,0 +1,11 @@
+[package]
+name = "pocket-relay-desktop-server"
+version = "0.0.0"
+description = "Pocket Relay Desktop app server"
+
+edition.workspace = true
+license.workspace = true
+keywords.workspace = true
+authors.workspace = true
+
+[dependencies]

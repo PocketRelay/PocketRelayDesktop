@@ -1,0 +1,13 @@
+[workspace]
+resolver = "2"
+members = ["crates/app", "crates/server"]
+
+[workspace.package]
+authors = ["Jacobtread <jacobtread@gmail.com>"]
+repository = "https://github.com/PocketRelay/PocketRelayDesktop"
+readme = "./README.md"
+license = "MIT"
+keywords = ["EA", "PocketRelay", "MassEffect3"]
+edition = "2024"
+
+[workspace.dependencies]

@@ -11,14 +11,16 @@ use crate::{
 mod blaze;
 mod http;
 mod redirector;
+pub mod rpc;
 
 /// Handle referencing a service bound to a local socket, contains
 /// the address and a handle to abort the task
+#[derive(Clone)]
 pub struct ServiceHandle {
     /// Local socket address of the server
-    addr: SocketAddrV4,
+    pub addr: SocketAddrV4,
     /// Handle to abort the server task
-    handle: AbortHandle,
+    pub handle: AbortHandle,
 }
 
 /// Binds a localhost TCP listener on any available port
@@ -33,13 +35,14 @@ pub async fn any_tcp_listener() -> anyhow::Result<(TcpListener, SocketAddrV4)> {
     let addr = match addr {
         SocketAddr::V4(addr) => addr,
         SocketAddr::V6(addr) => {
-            anyhow::bail!("expected local socket address to be IPv4 but got IPv6: {addr}")
+            anyhow::bail!("expected local socket address to be IPv4 but got IPv6: {addr}");
         }
     };
 
     Ok((listener, addr))
 }
 
+#[derive(Clone)]
 pub struct Services {
     blaze: ServiceHandle,
     redirector: ServiceHandle,

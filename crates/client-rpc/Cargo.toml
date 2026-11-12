@@ -1,0 +1,13 @@
+[package]
+name = "pocket-relay-desktop-client-rpc"
+version = "0.0.0"
+description = "Mass Effect 3 private server - RPC component"
+
+edition.workspace = true
+license.workspace = true
+keywords.workspace = true
+authors.workspace = true
+
+[dependencies]
+tarpc.workspace = true
+serde.workspace = true

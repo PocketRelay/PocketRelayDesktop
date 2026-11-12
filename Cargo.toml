@@ -1,6 +1,12 @@
 [workspace]
 resolver = "2"
-members = ["crates/app", "crates/server", "crates/blaze-networking", "crates/core"]
+members = [
+  "crates/app",
+  "crates/server",
+  "crates/blaze-networking",
+  "crates/core",
+  "crates/client-rpc",
+]
 
 [workspace.package]
 authors = ["Jacobtread <jacobtread@gmail.com>"]
@@ -14,6 +20,10 @@ edition = "2024"
 pocket-relay-desktop-blaze-networking = { path = "./crates/blaze-networking", version = "0.0.0" }
 pocket-relay-desktop-core = { path = "./crates/core", version = "0.0.0" }
 pocket-relay-desktop-server = { path = "./crates/server", version = "0.0.0" }
+pocket-relay-desktop-client-rpc = { path = "./crates/client-rpc", version = "0.0.0" }
+
+# RPC implementation
+tarpc = { version = "0.38", features = ["tokio1", "serde1", "serde-transport-json", "tcp"] }
 
 # Error handling
 anyhow = "1.0.104"

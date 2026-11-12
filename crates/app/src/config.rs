@@ -1,9 +1,12 @@
-use std::path::{Path, PathBuf};
+use std::{
+    net::SocketAddrV4,
+    path::{Path, PathBuf},
+};
 
 use anyhow::Context;
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Serialize, Clone)]
+#[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct Config {
     /// Current path to the game executable
     pub game_executable: Option<PathBuf>,
@@ -49,5 +52,14 @@ pub async fn save_config_to_path(config: &Config, path: &Path) -> anyhow::Result
         .await
         .context("failed to write config file")?;
 
+    Ok(())
+}
+
+pub async fn save_rpc_state(game_executable: &Path, rpc_addr: SocketAddrV4) -> anyhow::Result<()> {
+    let parent = game_executable
+        .parent()
+        .context("game executable missing parent path")?;
+    let path = parent.join("pocket-relay-rpc");
+    tokio::fs::write(path, rpc_addr.to_string()).await?;
     Ok(())
 }

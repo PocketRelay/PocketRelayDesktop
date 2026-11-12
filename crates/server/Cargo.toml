@@ -11,6 +11,7 @@ authors.workspace = true
 [dependencies]
 pocket-relay-desktop-core.workspace = true
 pocket-relay-desktop-blaze-networking.workspace = true
+pocket-relay-desktop-client-rpc.workspace = true
 
 tdf.workspace = true
 bytes.workspace = true
@@ -33,6 +34,8 @@ axum = "0.8.9"
 hyper = "1.6"
 hyper-util = { version = "0.1.10", features = ["tokio"] }
 tower = { version = "0.5.2", features = ["util"] }
+
+tarpc.workspace = true
 
 serde.workspace = true
 serde_json.workspace = true

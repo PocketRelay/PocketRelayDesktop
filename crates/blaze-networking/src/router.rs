@@ -37,7 +37,7 @@ struct HandlerRoute<H, Args, Res> {
 
 /// Wrapper around [Handler] that erasing the associated generic types
 /// so that it can be stored within the [Router]
-trait ErasedHandler<State>: Send + Sync {
+pub trait ErasedHandler<State>: Send + Sync {
     fn handle(&self, req: PacketRequest<State>) -> BoxFuture<'_, Packet>;
 }
 
@@ -69,8 +69,9 @@ impl<State> PacketRequest<State> {
     }
 }
 
+pub type ErasedRoute<State> = Box<dyn ErasedHandler<State>>;
 type AnyMap = IntHashMap<TypeId, Box<dyn Any + Send + Sync>>;
-type RouteMap<State> = IntHashMap<ComponentKey, Box<dyn ErasedHandler<State>>>;
+type RouteMap<State> = IntHashMap<ComponentKey, ErasedRoute<State>>;
 
 #[derive(Default)]
 pub struct BlazeRouterBuilder<State> {
@@ -112,12 +113,28 @@ impl<State> BlazeRouterBuilder<State> {
         Args: 'static,
         Res: 'static,
     {
-        self.routes.insert(
-            component_key(component, command),
-            Box::new(HandlerRoute {
-                handler: route,
-                _marker: PhantomData,
-            }),
+        self.routes
+            .insert(component_key(component, command), handler(route));
+    }
+
+    /// Applies a router init function against the router
+    ///
+    /// Just a helper function to make initialization cleaner
+    pub fn apply(mut self, init: impl Fn(&mut Self)) -> Self {
+        init(&mut self);
+        self
+    }
+
+    /// Append many routes for the specific component
+    pub fn routes(
+        &mut self,
+        component: u16,
+        routes: impl IntoIterator<Item = (u16, ErasedRoute<State>)>,
+    ) {
+        self.routes.extend(
+            routes
+                .into_iter()
+                .map(|(command, route)| (component_key(component, command), route)),
         );
     }
 
@@ -127,6 +144,17 @@ impl<State> BlazeRouterBuilder<State> {
             extensions: Arc::new(self.extensions),
         })
     }
+}
+
+pub fn handler<Args, Res, State>(route: impl Handler<Args, Res, State>) -> ErasedRoute<State>
+where
+    Args: 'static,
+    Res: 'static,
+{
+    Box::new(HandlerRoute {
+        handler: route,
+        _marker: PhantomData,
+    })
 }
 
 pub struct BlazeRouter<State> {
